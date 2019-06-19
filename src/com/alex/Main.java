@@ -1,6 +1,5 @@
 package com.alex;
 
-import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -16,7 +15,7 @@ public class Main {
         // attempt to move in an invalid direction should print a message and remain in the same place.
         //
         // Single letter commands (N, W, S, E, Q) should still be available.
-        
+
         Scanner scanner = new Scanner(System.in);
 
         locations.put(0, new Location(0, "You are sitting in front of a computer learning Java"));
@@ -51,18 +50,44 @@ public class Main {
 
             Map<String, Integer> exits = locations.get(loc).getExits();
             System.out.print("Available exits are ");
-            for(String exit : exits.keySet()){
+            for (String exit : exits.keySet()) {
                 System.out.print(exit + ", ");
             }
             System.out.println();
 
             String direction = scanner.nextLine().toUpperCase();
 
-            if(exits.containsKey(direction)){
+            if (direction.length() > 1) {
+
+                direction = getCharOfDirection(direction);
+            }
+
+            if (exits.containsKey(direction)) {
                 loc = exits.get(direction);
-            }else{
+            } else {
                 System.out.println("You cannot go in that direction");
             }
         }
+    }
+
+    static String getCharOfDirection(String direction) {
+        Map<String, String> vocabulary = new HashMap<>();
+        vocabulary.put("QUIT", "Q");
+        vocabulary.put("NORTH", "N");
+        vocabulary.put("SOUTH", "S");
+        vocabulary.put("EAST", "E");
+        vocabulary.put("WEST", "W");
+
+        String[] directionArray = direction.split(" ");
+        for (String word : directionArray) {
+            if (vocabulary.containsKey(word)) {
+                return vocabulary.get(word);
+            }
+        }
+//        if (Arrays.asList(directionArray).contains("NORTH")) return "N";
+//        if (Arrays.asList(directionArray).contains("SOUTH")) return "S";
+//        if (Arrays.asList(directionArray).contains("EAST")) return "E";
+//        if (Arrays.asList(directionArray).contains("WEST")) return "W";
+        return direction;
     }
 }
